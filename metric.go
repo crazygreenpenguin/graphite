@@ -11,6 +11,7 @@ type Metric struct {
 	Timestamp int64
 }
 
+// NewMetric generate new Metric struct
 func NewMetric(name string, value interface{}, timestamp int64) Metric {
 	return Metric{
 		Name:      name,
@@ -19,6 +20,7 @@ func NewMetric(name string, value interface{}, timestamp int64) Metric {
 	}
 }
 
+// ToString convert Metric struct to string view
 func (metric Metric) ToString() string {
 	return fmt.Sprintf(
 		"%s %v %d",
@@ -28,6 +30,7 @@ func (metric Metric) ToString() string {
 	)
 }
 
+// ToByte convert Metric struct to []byte ready for remote sending
 func (metric Metric) ToByte() []byte {
 	return []byte(fmt.Sprintf(
 		"%s %v %d\n",

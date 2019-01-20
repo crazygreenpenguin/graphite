@@ -6,16 +6,15 @@ import (
 )
 
 const (
-	ProtocolTCP = 0
 	//ProtocolTCP define graphite server protocol TCP
-	ProtocolUDP = 1
+	ProtocolTCP = 0
 	//ProtocolUDP define graphite server protocol UDP
-	ProtocolStdout = 2
+	ProtocolUDP = 1
 	//ProtocolStdout define printing metric in stdout
+	ProtocolStdout = 2
 )
 
 //Error unsupported protocol
-
 var ErrUnsupportedProto = errors.New("unsupported protocol")
 
 //Interface to send metric to graphite server
@@ -44,7 +43,6 @@ type Config struct {
 }
 
 //New return Graphite struct with config setting by conf
-
 func New(conf *Config) (Graphite, error) {
 	switch conf.Protocol {
 	case ProtocolTCP:

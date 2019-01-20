@@ -13,7 +13,6 @@ const defaultTimeout = 5
 // before forcing the connection establishment to fail
 
 // NewGraphiteTCP is a factory method that's used to create a new GraphiteTCP struct
-
 func NewGraphiteTCP(conf *Config) (*GraphiteTCP, error) {
 	server := GraphiteTCP{
 		address: conf.Address,
@@ -28,7 +27,6 @@ func NewGraphiteTCP(conf *Config) (*GraphiteTCP, error) {
 }
 
 // GraphiteTCP is a struct that defines TCP graphite connection
-
 type GraphiteTCP struct {
 	address string
 	timeout time.Duration
@@ -38,7 +36,6 @@ type GraphiteTCP struct {
 }
 
 // Connect establish TCP connection to metric server
-
 func (graphite *GraphiteTCP) Connect() error {
 	graphite.lock.Lock()
 	defer graphite.lock.Unlock()
@@ -64,7 +61,6 @@ func (graphite *GraphiteTCP) Connect() error {
 }
 
 // Disconnect closes the GraphiteTCP.conn field
-
 func (graphite *GraphiteTCP) Disconnect() error {
 	graphite.lock.Lock()
 	defer graphite.lock.Unlock()
@@ -105,7 +101,6 @@ func (graphite *GraphiteTCP) SendMetric(metric *Metric) error {
 }
 
 // SendMetrics method sends the many metrics to metric server
-
 func (graphite *GraphiteTCP) SendMetrics(metrics *[]Metric) error {
 	for _, metric := range *metrics {
 		err := graphite.SendMetric(&metric)
@@ -118,7 +113,6 @@ func (graphite *GraphiteTCP) SendMetrics(metrics *[]Metric) error {
 
 // The SimpleSend method can be used to just pass a metric name and value and
 // have it be sent to the GraphiteTCP host with the current timestamp
-
 func (graphite *GraphiteTCP) SimpleSend(name string, value interface{}) error {
 	metric := NewMetric(name, value, time.Now().Unix())
 	err := graphite.SendMetric(&metric)

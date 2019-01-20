@@ -7,7 +7,6 @@ import (
 )
 
 // NewGraphiteStdout is a factory method that's used to create a new GraphiteStdout struct
-
 func NewGraphiteStdout(conf *Config) (*GraphiteStdout, error) {
 	server := GraphiteStdout{
 		prefix: conf.Prefix,
@@ -17,20 +16,17 @@ func NewGraphiteStdout(conf *Config) (*GraphiteStdout, error) {
 }
 
 // GraphiteStdout is a struct that write metric in stdout
-
 type GraphiteStdout struct {
 	prefix string
 	lock   sync.Mutex
 }
 
 // Connect dummy method for Graphite interface implement's
-
 func (graphite *GraphiteStdout) Connect() error {
 	return nil
 }
 
 // Disconnect dummy method for Graphite interface implement's
-
 func (graphite *GraphiteStdout) Disconnect() error {
 	return nil
 }
@@ -66,7 +62,6 @@ func (graphite *GraphiteStdout) SendMetric(metric *Metric) error {
 }
 
 // SendMetrics method sends the many metrics to metric server
-
 func (graphite *GraphiteStdout) SendMetrics(metrics *[]Metric) error {
 	for _, metric := range *metrics {
 		err := graphite.SendMetric(&metric)
@@ -79,7 +74,6 @@ func (graphite *GraphiteStdout) SendMetrics(metrics *[]Metric) error {
 
 // The SimpleSend method can be used to just pass a metric name and value and
 // have it be sent to the GraphiteStdout host with the current timestamp
-
 func (graphite *GraphiteStdout) SimpleSend(name string, value interface{}) error {
 	var metricName string
 	if graphite.prefix == "" {
