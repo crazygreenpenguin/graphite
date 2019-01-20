@@ -1,4 +1,5 @@
 # graphite
+[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/crazygreenpenguin/graphite)
 [![License](http://img.shields.io/badge/license-mit-blue.svg)](https://raw.githubusercontent.com/crazygreenpenguin/graphite/master/LICENSE)
 [![Build Status](https://travis-ci.com/crazygreenpenguin/graphite.svg?token=cotBUTkDQKChij5xCA6k&branch=master)](https://travis-ci.com/crazygreenpenguin/)
 
