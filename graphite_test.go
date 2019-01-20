@@ -6,6 +6,23 @@ import (
 	"time"
 )
 
+func TestNew(t *testing.T) {
+	conf := Config{
+		Address:  "127.0.0.1:3300",
+		Prefix:   "test",
+		Protocol: 12,
+		Timeout:  10 * time.Second,
+	}
+
+	server, err := New(&conf)
+	if err != ErrUnsupportedProto {
+		t.Fail()
+	}
+	if server != nil {
+		t.Fail()
+	}
+}
+
 func TestNew_ProtocolTCP(t *testing.T) {
 	conf := Config{
 		Address:  "127.0.0.1:3300",
@@ -41,6 +58,32 @@ func TestNew_ProtocolTCP(t *testing.T) {
 	if srv.timeout != conf.Timeout {
 		t.Fail()
 	}
+	if srv.address != conf.Address {
+		t.Fail()
+	}
+}
+
+func TestNew_ProtocolUDP(t *testing.T) {
+	conf := Config{
+		Address:  "127.0.0.1:3300",
+		Prefix:   "test",
+		Protocol: ProtocolUDP,
+	}
+
+	udpServer, err := New(&conf)
+	if err != nil {
+		t.Fail()
+	}
+
+	srv, ok := udpServer.(*GraphiteUDP)
+
+	if !ok {
+		t.Fail()
+	}
+	if srv.prefix != conf.Prefix {
+		t.Fail()
+	}
+
 	if srv.address != conf.Address {
 		t.Fail()
 	}

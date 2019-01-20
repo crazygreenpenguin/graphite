@@ -14,6 +14,10 @@ const (
 	//ProtocolStdout define printing metric in stdout
 )
 
+//Error unsupported protocol
+
+var ErrUnsupportedProto = errors.New("unsupported protocol")
+
 //Interface to send metric to graphite server
 type Graphite interface {
 	// SendMetric send one metric to metric server
@@ -32,7 +36,7 @@ type Config struct {
 	Address string
 	// Protocol - set protocol will be using to metric send, graphite.ProtocolTCP for example.
 	Protocol uint8
-	// Timeout - set send timeout
+	// Timeout - set send timeout TCP
 	Timeout time.Duration
 	// Prefix - add prefix to metric.Name, if name metric is test1 and prefix test_metric,
 	// then send metric with name  test_metric.test1
@@ -45,9 +49,11 @@ func New(conf *Config) (Graphite, error) {
 	switch conf.Protocol {
 	case ProtocolTCP:
 		return NewGraphiteTCP(conf)
+	case ProtocolUDP:
+		return NewGraphiteUDP(conf)
 	case ProtocolStdout:
 		return NewGraphiteStdout(conf)
 	default:
-		return nil, errors.New("unsupported protocol")
+		return nil, ErrUnsupportedProto
 	}
 }

@@ -33,6 +33,15 @@ func TestMetric_ToString(t *testing.T) {
 		t.Fail()
 	}
 }
+
+func TestMetric_ToByte(t *testing.T) {
+	timestamp := time.Now().Unix()
+	metric := NewMetric("test1", int(12), timestamp)
+	if string(metric.ToByte()) != fmt.Sprintf("test1 12 %d\n", timestamp) {
+		t.Fail()
+	}
+}
+
 func BenchmarkNewMetric(b *testing.B) {
 	b.StopTimer()
 	timestamp := time.Now().Unix()

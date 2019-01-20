@@ -7,18 +7,12 @@ import (
 	"time"
 )
 
-const defaultTimeout = 5
+// NewGraphiteUDP is a factory method that's used to create a new GraphiteUDP struct
 
-// defaultTimeout is the default number of seconds that we're willing to wait
-// before forcing the connection establishment to fail
-
-// NewGraphiteTCP is a factory method that's used to create a new GraphiteTCP struct
-
-func NewGraphiteTCP(conf *Config) (*GraphiteTCP, error) {
-	server := GraphiteTCP{
+func NewGraphiteUDP(conf *Config) (*GraphiteUDP, error) {
+	server := GraphiteUDP{
 		address: conf.Address,
 		prefix:  conf.Prefix,
-		timeout: conf.Timeout,
 	}
 	err := server.Connect()
 	if err != nil {
@@ -27,19 +21,18 @@ func NewGraphiteTCP(conf *Config) (*GraphiteTCP, error) {
 	return &server, nil
 }
 
-// GraphiteTCP is a struct that defines TCP graphite connection
+// GraphiteUDP is a struct that defines TCP graphite connection
 
-type GraphiteTCP struct {
+type GraphiteUDP struct {
 	address string
-	timeout time.Duration
 	prefix  string
 	conn    net.Conn
 	lock    sync.Mutex
 }
 
-// Connect establish TCP connection to metric server
+// Connect UDP to metric server
 
-func (graphite *GraphiteTCP) Connect() error {
+func (graphite *GraphiteUDP) Connect() error {
 	graphite.lock.Lock()
 	defer graphite.lock.Unlock()
 
@@ -47,15 +40,17 @@ func (graphite *GraphiteTCP) Connect() error {
 		graphite.conn.Close()
 	}
 
-	if graphite.timeout == 0 {
-		graphite.timeout = defaultTimeout * time.Second
-	}
-
-	conn, err := net.DialTimeout(
-		"tcp",
-		graphite.address,
-		graphite.timeout)
+	udpAddr, err := net.ResolveUDPAddr("udp", graphite.address)
 	if err != nil {
+		return err
+	}
+	conn, err := net.DialUDP("udp",
+		nil,
+		udpAddr)
+	if err != nil {
+		if conn != nil {
+			conn.Close()
+		}
 		return err
 	}
 
@@ -63,9 +58,9 @@ func (graphite *GraphiteTCP) Connect() error {
 	return nil
 }
 
-// Disconnect closes the GraphiteTCP.conn field
+// Disconnect closes the GraphiteUDP.conn field
 
-func (graphite *GraphiteTCP) Disconnect() error {
+func (graphite *GraphiteUDP) Disconnect() error {
 	graphite.lock.Lock()
 	defer graphite.lock.Unlock()
 
@@ -75,7 +70,7 @@ func (graphite *GraphiteTCP) Disconnect() error {
 }
 
 // SendMetric send one metric to metric server
-func (graphite *GraphiteTCP) SendMetric(metric *Metric) error {
+func (graphite *GraphiteUDP) SendMetric(metric *Metric) error {
 	graphite.lock.Lock()
 	defer graphite.lock.Unlock()
 
@@ -106,7 +101,7 @@ func (graphite *GraphiteTCP) SendMetric(metric *Metric) error {
 
 // SendMetrics method sends the many metrics to metric server
 
-func (graphite *GraphiteTCP) SendMetrics(metrics *[]Metric) error {
+func (graphite *GraphiteUDP) SendMetrics(metrics *[]Metric) error {
 	for _, metric := range *metrics {
 		err := graphite.SendMetric(&metric)
 		if err != nil {
@@ -117,10 +112,16 @@ func (graphite *GraphiteTCP) SendMetrics(metrics *[]Metric) error {
 }
 
 // The SimpleSend method can be used to just pass a metric name and value and
-// have it be sent to the GraphiteTCP host with the current timestamp
+// have it be sent to the GraphiteUDP host with the current timestamp
 
-func (graphite *GraphiteTCP) SimpleSend(name string, value interface{}) error {
-	metric := NewMetric(name, value, time.Now().Unix())
+func (graphite *GraphiteUDP) SimpleSend(name string, value interface{}) error {
+	var metricName string
+	if graphite.prefix == "" {
+		metricName = name
+	} else {
+		metricName = fmt.Sprintf("%s.%s", graphite.prefix, name)
+	}
+	metric := NewMetric(metricName, value, time.Now().Unix())
 	err := graphite.SendMetric(&metric)
 	if err != nil {
 		return err

@@ -30,7 +30,7 @@ func (metric Metric) ToString() string {
 
 func (metric Metric) ToByte() []byte {
 	return []byte(fmt.Sprintf(
-		"%s %v %d",
+		"%s %v %d\n",
 		metric.Name,
 		metric.Value,
 		metric.Timestamp,
