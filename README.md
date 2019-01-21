@@ -1,7 +1,7 @@
 # graphite
 [![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](https://godoc.org/github.com/crazygreenpenguin/graphite)
 [![License](http://img.shields.io/badge/license-mit-blue.svg)](https://raw.githubusercontent.com/crazygreenpenguin/graphite/master/LICENSE)
-[![Build Status](https://travis-ci.com/crazygreenpenguin/graphite.svg?branch=master)](https://travis-ci.com/crazygreenpenguin/)
+[![Build Status](https://travis-ci.com/crazygreenpenguin/graphite.svg?branch=master)](https://travis-ci.com/crazygreenpenguin/graphite)
 [![Go Report Card](https://goreportcard.com/badge/github.com/crazygreenpenguin/graphite)](https://goreportcard.com/report/github.com/crazygreenpenguin/graphite)
 
 Simple lightweight graphite library for
