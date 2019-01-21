@@ -14,10 +14,10 @@ const (
 	ProtocolStdout = 2
 )
 
-//Error unsupported protocol
+// ErrUnsupportedProto error unsupported client protocol
 var ErrUnsupportedProto = errors.New("unsupported protocol")
 
-//Interface to send metric to graphite server
+// Graphite interface to send metric to different graphite server
 type Graphite interface {
 	// SendMetric send one metric to metric server
 	SendMetric(metric *Metric) error

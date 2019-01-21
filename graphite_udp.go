@@ -88,6 +88,8 @@ func (graphite *GraphiteUDP) SendMetric(metric *Metric) error {
 		sendingMetric.Name = fmt.Sprintf("%s.%s", graphite.prefix, metric.Name)
 	}
 
+	sendingMetric.Value = metric.Value
+
 	_, err := graphite.conn.Write(sendingMetric.ToByte())
 	if err != nil {
 		return err
@@ -106,7 +108,7 @@ func (graphite *GraphiteUDP) SendMetrics(metrics *[]Metric) error {
 	return nil
 }
 
-// The SimpleSend method can be used to just pass a metric name and value and
+// SimpleSend method can be used to just pass a metric name and value and
 // have it be sent to the GraphiteUDP host with the current timestamp
 func (graphite *GraphiteUDP) SimpleSend(name string, value interface{}) error {
 	var metricName string

@@ -54,10 +54,12 @@ func (graphite *GraphiteStdout) SendMetric(metric *Metric) error {
 		sendingMetric.Name = fmt.Sprintf("%s.%s", graphite.prefix, metric.Name)
 	}
 
+	sendingMetric.Value = metric.Value
+
 	fmt.Printf("%s %s=%v",
-		time.Unix(metric.Timestamp, 0).Format("2006-01-02 15:04:05"),
-		sendingMetric.
-			Name, sendingMetric.Value)
+		time.Unix(sendingMetric.Timestamp, 0).Format("2006-01-02 15:04:05"),
+		sendingMetric.Name,
+		sendingMetric.Value)
 	return nil
 }
 
@@ -72,7 +74,7 @@ func (graphite *GraphiteStdout) SendMetrics(metrics *[]Metric) error {
 	return nil
 }
 
-// The SimpleSend method can be used to just pass a metric name and value and
+// SimpleSend method can be used to just pass a metric name and value and
 // have it be sent to the GraphiteStdout host with the current timestamp
 func (graphite *GraphiteStdout) SimpleSend(name string, value interface{}) error {
 	var metricName string
