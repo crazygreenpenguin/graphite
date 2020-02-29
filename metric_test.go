@@ -8,7 +8,7 @@ import (
 
 func TestNewMetric(t *testing.T) {
 	timestamp := time.Now().Unix()
-	metric := NewMetric("test1", int(12), timestamp)
+	metric := NewMetric("test1", 12, timestamp)
 	if metric.Timestamp != timestamp {
 		t.Fail()
 	}
@@ -28,7 +28,7 @@ func TestNewMetric(t *testing.T) {
 
 func TestMetric_ToString(t *testing.T) {
 	timestamp := time.Now().Unix()
-	metric := NewMetric("test1", int(12), timestamp)
+	metric := NewMetric("test1", 12, timestamp)
 	if metric.ToString() != fmt.Sprintf("test1 12 %d", timestamp) {
 		t.Fail()
 	}
@@ -36,7 +36,7 @@ func TestMetric_ToString(t *testing.T) {
 
 func TestMetric_ToByte(t *testing.T) {
 	timestamp := time.Now().Unix()
-	metric := NewMetric("test1", int(12), timestamp)
+	metric := NewMetric("test1", 12, timestamp)
 	if string(metric.ToByte()) != fmt.Sprintf("test1 12 %d\n", timestamp) {
 		t.Fail()
 	}
@@ -47,14 +47,14 @@ func BenchmarkNewMetric(b *testing.B) {
 	timestamp := time.Now().Unix()
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
-		_ = NewMetric("test1", int(12), timestamp)
+		_ = NewMetric("test1", 12, timestamp)
 	}
 }
 
 func BenchmarkMetric_ToString(b *testing.B) {
 	b.StopTimer()
 	timestamp := time.Now().Unix()
-	metric := NewMetric("test1", int(12), timestamp)
+	metric := NewMetric("test1", 12, timestamp)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		_ = metric.ToString()
@@ -64,7 +64,7 @@ func BenchmarkMetric_ToString(b *testing.B) {
 func BenchmarkMetric_ToByte(b *testing.B) {
 	b.StopTimer()
 	timestamp := time.Now().Unix()
-	metric := NewMetric("test1", int(12), timestamp)
+	metric := NewMetric("test1", 12, timestamp)
 	b.StartTimer()
 	for i := 0; i < b.N; i++ {
 		_ = metric.ToByte()

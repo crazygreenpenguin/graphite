@@ -41,9 +41,14 @@ func TestNew_ProtocolTCP(t *testing.T) {
 		t.Error(err)
 	}
 	// Close the listener when test finish
-	defer l.Close()
+	defer func() {
+		if err := l.Close(); err != nil {
+			t.Log(err)
+			t.Fail()
+		}
+	}()
 
-	tcpServer, err = New(&conf)
+	tcpServer, err = New(conf)
 	if err != nil {
 		t.Fail()
 	}

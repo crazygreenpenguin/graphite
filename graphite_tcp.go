@@ -41,7 +41,9 @@ func (graphite *GraphiteTCP) Connect() error {
 	defer graphite.lock.Unlock()
 
 	if graphite.conn != nil {
-		graphite.conn.Close()
+		if err := graphite.conn.Close(); err != nil {
+			return err
+		}
 	}
 
 	if graphite.timeout == 0 {

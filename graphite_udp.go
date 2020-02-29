@@ -34,7 +34,9 @@ func (graphite *GraphiteUDP) Connect() error {
 	defer graphite.lock.Unlock()
 
 	if graphite.conn != nil {
-		graphite.conn.Close()
+		if err := graphite.conn.Close(); err != nil {
+			return err
+		}
 	}
 
 	udpAddr, err := net.ResolveUDPAddr("udp", graphite.address)
@@ -46,7 +48,10 @@ func (graphite *GraphiteUDP) Connect() error {
 		udpAddr)
 	if err != nil {
 		if conn != nil {
-			conn.Close()
+			if err = conn.Close(); err != nil {
+				return err
+			}
+
 		}
 		return err
 	}
