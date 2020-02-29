@@ -24,14 +24,14 @@ func TestNew(t *testing.T) {
 }
 
 func TestNew_ProtocolTCP(t *testing.T) {
-	conf := Config{
+	conf := &Config{
 		Address:  "127.0.0.1:3300",
 		Prefix:   "test",
 		Protocol: ProtocolTCP,
 		Timeout:  10 * time.Second,
 	}
 
-	tcpServer, err := New(&conf)
+	tcpServer, err := New(conf)
 	if err == nil {
 		t.Fail()
 	}
