@@ -24,6 +24,10 @@ func TestNew(t *testing.T) {
 }
 
 func TestNew_ProtocolTCP(t *testing.T) {
+	var err error
+	var tcpServer Graphite
+	var l net.Listener
+
 	conf := &Config{
 		Address:  "127.0.0.1:3300",
 		Prefix:   "test",
@@ -31,12 +35,12 @@ func TestNew_ProtocolTCP(t *testing.T) {
 		Timeout:  10 * time.Second,
 	}
 
-	tcpServer, err := New(conf)
+	tcpServer, err = New(conf)
 	if err == nil {
 		t.Fail()
 	}
 
-	l, err := net.Listen("tcp", "127.0.0.1:3300")
+	l, err = net.Listen("tcp", "127.0.0.1:3300")
 	if err != nil {
 		t.Error(err)
 	}
